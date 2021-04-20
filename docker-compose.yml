@@ -1,0 +1,69 @@
+---
+version: '3.5'
+services:
+
+  db:
+    image: kartoza/postgis:13.0
+    volumes:
+      - pg-data:/var/lib/postgresql
+      - pg-backups:/backups
+    environment:
+      POSTGRES_DB: $PG_DB
+      POSTGRES_USER: $PG_USER
+      POSTGRES_PASS: $PG_PASS
+      ALLOW_IP_RANGE: 0.0.0.0/0
+      POSTGRES_MULTIPLE_EXTENSIONS: postgis,hstore,postgis_topology,postgis_raster,pgrouting,postgis_sfcgal
+    ports:
+      - "${PG_PORT}:5432"
+    restart: always
+    healthcheck:
+      test: 'exit 0'
+
+  geoserver:
+    image: kartoza/geoserver:2.19.0
+    volumes:
+      - geoserver-data:/opt/geoserver/data_dir
+    ports:
+      - "8881:8080"
+    restart: on-failure
+    environment:
+      GEOSERVER_ADMIN_PASSWORD: $GEOSERVER_PASS
+      GEOSERVER_ADMIN_USER: $GEOSERVER_USER
+      INITIAL_MEMORY: 256M
+      MAXIMUM_MEMORY: 512M
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail -s http://localhost:8080/ || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+
+  graphql:
+    image: hasura/graphql-engine:v2.0.0-alpha.1
+    ports:
+      - "8882:8080"
+    depends_on:
+      - db
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: "postgres://${PG_USER}:${PG_PASS}@db:5432/${PG_DB}"
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_ADMIN_SECRET: secretkey
+
+  cms:
+    image: strapi/strapi:3.5.4-alpine
+    volumes:
+      - strapi-data:/srv/app
+    ports:
+      - '8883:1337'
+
+  # udtools:
+  #   image: .
+
+volumes:
+  pg-data:
+  pg-backups:
+  geoserver-data:
+  strapi-data:
