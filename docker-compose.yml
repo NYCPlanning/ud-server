@@ -29,10 +29,10 @@ services:
     environment:
       GEOSERVER_ADMIN_PASSWORD: $GEOSERVER_PASS
       GEOSERVER_ADMIN_USER: $GEOSERVER_USER
-      INITIAL_MEMORY: 256M
-      MAXIMUM_MEMORY: 512M
+      INITIAL_MEMORY: 128M
+      MAXIMUM_MEMORY: 256M
     depends_on:
-      - db:
+      - db
     healthcheck:
       test: curl --fail -s http://localhost:8080/ || exit 1
       interval: 1m30s
