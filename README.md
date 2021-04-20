@@ -9,7 +9,7 @@ Web services to support UDTools and other DCP Urban Design products, using:
 
 ## Setup
 
-Create a `.env` from `.env.template` at the repository root, then run `docker-compose up`. `SERVER_HOST` can be either your local machine for testing or a remote server such as a Digital Ocean Droplet, and needs to have Docker installed and running.
+Create a `.env` from `.env.template` at the repository root, then run `docker-compose up`. `SERVER_HOST` can be either your local machine for testing or a remote server such as a Digital Ocean Droplet (>1GB RAM recommended), and needs to have Docker installed and running.
 
 Once the server is online, run various `scripts` to load/update data from different sources, for example...
 
