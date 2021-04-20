@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+/**
+ * Reference to a defined zone, used in creation of zoning lots.
+ */
+message Zone {
+  string id = 1;
+}
+
+/**
+ * Current targeted goals for massing generation.
+ */
+ message MassingGoals {
+  repeated FloorGoals floors = 1;
+}
+
+/**
+ * Goals for a single floor used for massing generation.
+ */
+message FloorGoals {
+  int32 height = 1;
+  ZoningUse use = 2;
+}
+
+message ZoningUse {
+  ZoningUseGroup use_group = 1;
+  string use_label = 2;
+}
+
+/**
+ * NYC Zoning use groups.
+ */
+enum ZoningUseGroup {
+  UNKNOWN = 0;
+  GROUP1 = 1;
+  GROUP2 = 2;
+  GROUP3 = 3;
+  GROUP4 = 4;
+  GROUP5 = 5;
+  GROUP6 = 6;
+  GROUP7 = 7;
+  GROUP8 = 8;
+  GROUP9 = 9;
+  GROUP10 = 10;
+  GROUP11 = 11;
+  GROUP12 = 12;
+  GROUP13 = 13;
+  GROUP14 = 14;
+  GROUP15 = 15;
+  GROUP16 = 16;
+  GROUP17 = 17;
+  GROUP18 = 18;
+}

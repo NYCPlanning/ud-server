@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+import "zoning_lot.proto";
+
+/**
+ * Custom lot defined by the user.
+ */
+message CustomLot {
+  bytes geom = 1;
+  repeated LotLine lot_lines = 2;
+}
+
+/**
+ * Custom zoning district defined by the user.
+ */
+ message CustomZone {
+  string id = 1;
+  bytes geom = 2;
+}

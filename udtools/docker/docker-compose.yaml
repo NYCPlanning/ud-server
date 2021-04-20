@@ -1,0 +1,11 @@
+version: '3.4'
+services:
+  proxy:
+    container_name: udtools-core-proxy
+    build:
+      context: ./proxy/
+      dockerfile: ./proxy/Dockerfile
+    image: grpcweb/envoy
+    ports:
+      - '8088:8088'
+      - '9901:9901'

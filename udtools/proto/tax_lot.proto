@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+// MapPLUTO tax lot from base model
+message TaxLotMessage {
+  string bbl = 1;
+  bytes geom = 2;
+}

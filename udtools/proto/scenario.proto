@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+import "summary.proto";
+
+/**
+ * A moment in time for analysis, common to all 
+ * sites within the study area.
+ */
+message Scenario {
+  string id = 1;
+  int32 build_year = 2;
+}
+
+/**
+ * Creates summary tables.
+ */
+service ScenarioSummaryService {
+  rpc GetScenarioTable(Scenario) returns (ScenarioSummary);
+}

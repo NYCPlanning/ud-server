@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+/**
+ * Full set of output fields for an individual ProposedBuilding
+ * or ExistingBuilding.
+ */
+message BuildingSummary {
+  string site_id = 1;
+  string scenario_id = 2;
+  repeated string zone_id = 3;
+  int32 lot_count = 4;
+  int32 zoning_lot_area = 5;
+  string existing_zoning = 6;
+  string proposed_zoning = 7;
+  string group = 8;
+  string note = 9;
+  BuildingFloorArea gfa_provided = 10;
+  BuildingFloorArea zfa_provided = 11;
+  BuildingFloorArea gfa_required = 12;
+  BuildingFAR far = 13;
+  BuildingDimensions dimensions = 14;
+  BuildingCounts counts = 15;
+  BuildingCounts counts_20 = 16;
+  BuildingCounts counts_25 = 17;
+  BuildingCounts counts_30 = 18;
+}
+
+message BuildingFloorArea {
+  int32 residential = 1; // total residential
+  int32 house_of_worship = 2;
+  int32 medical_office = 3;
+  int32 school = 4;
+  int32 community_facility_other = 5;
+  int32 community_facility = 6; // total community facility
+  int32 destination_retail = 7;
+  int32 hotel = 8;
+  int32 life_sciences = 9;
+  int32 local_retail = 10;
+  int32 office = 11;
+  int32 supermarket = 12;
+  int32 commercial_other = 13;
+  int32 commercial = 14;  // total commercial
+  int32 auto_related = 15;
+  int32 industrial = 16;
+  int32 self_storage = 17;
+  int32 warehouse = 18;
+  int32 manufacturing_other = 19;
+  int32 manufacturing = 20; // total manufacturing
+  int32 parking = 21;
+  int32 loading = 22;
+  int32 bike_parking = 23;
+  int32 total = 24; // not including parking
+}
+
+message BuildingFAR {
+  float residential = 1;
+  float community_facility = 2;
+  float commercial = 3;
+  float manufacturing = 4;
+  float total = 5;
+}
+
+message BuildingDimensions {
+  int32 height = 1;
+  int32 elevation = 2;
+  int32 frontage = 3;
+  int32 floor_count = 4;
+}
+
+message BuildingCounts {
+  int32 residential_units = 1;
+  int32 hotel_rooms = 2;
+  int32 parking_spaces_residential = 3;
+  int32 parking_spaces_community_facility = 4;
+  int32 parking_spaces_commercial = 5;
+  int32 parking_spaces_manufacturing = 6;
+  int32 parking_spaces_total = 7;
+  int32 bike_parking_spaces = 8;
+  int32 loading_berths = 9;
+}
+
+message ScenarioSummary {
+  string scenario_id = 1;
+  repeated BuildingSummary buildings = 2;
+}
+
+message StudySummary {
+  string study_id = 1;
+  repeated ScenarioSummary scenarios = 2;
+}

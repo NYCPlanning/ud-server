@@ -1,0 +1,22 @@
+syntax = "proto3";
+import "tax_lot.proto";
+/**
+ * Container for defined sites within a study.
+ */
+
+/**
+ * The physical location of a development site
+ * and  associated attributes, common to all scenarios
+ * (i.e. constant over time).
+ */
+message SiteMessage {
+  string id = 1;
+  bytes geom = 2;
+}
+
+/**
+ * Creates new sites.
+ */
+service SiteService {
+  rpc MakeSite(TaxLotMessage) returns (SiteMessage);
+}

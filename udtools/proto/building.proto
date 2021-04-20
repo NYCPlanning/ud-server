@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+import "summary.proto";
+import "zoning_lot.proto";
+import "zoning_common.proto";
+
+/**
+ * MapPLUTO tax lot from base model.
+ */
+message ProposedBuilding {
+  string id = 1;
+  BuildingEnvelope envelope = 2;
+  repeated BuildingStorey floors = 3;
+}
+
+message BuildingEnvelope {
+  bytes geom = 1;
+  repeated BuildingFace envelope_faces = 2;
+}
+
+message BuildingStorey {
+  sint32 level = 1;  // 0-indexed floor above ground
+  bytes geom = 2;    // surface geometry of the floor
+  ZoningUse use = 3; // use definition
+}
+
+/**
+ * Building face marker.
+ */
+message BuildingFace {
+  int32 index = 1;
+  enum BuildingFaceType {
+    UNKNOWN = 0;  // Unknown face type (default)
+    ROOF = 1;     // Roof
+    LOTLINE = 2;  // Lot line facade
+    FRONT = 3;    // Street-facing facade
+    INTERIOR = 4; // Interior faceade
+    BELLY = 5;    // Underside
+  }
+  BuildingFaceType type = 2;
+}
+
+message MakeBuildingRequest {
+  ZoningLot zoning_lot = 1;
+  MassingGoals massing_goals = 2;
+}
+
+/**
+ * Creates new buildings.
+ */
+service BuildingService {
+  rpc MakeBuilding(MakeBuildingRequest) returns (ProposedBuilding);
+}
+
+/**
+ * Creates summary tables.
+ */
+service BuildingSummaryService {
+  rpc GetBuildingTable(ProposedBuilding) returns (BuildingSummary);
+}
+
+/**
+ * IFC import/export for buildings.
+ */
+// service IFCBuildingService {
+//   rpc ToIFC(ProposedBuilding) returns ();
+//   rpc FromIFC() returns (ProposedBuilding);
+// }

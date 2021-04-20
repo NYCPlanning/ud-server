@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+import "scenario.proto";
+import "site.proto";
+import "zoning_common.proto";
+
+/**
+ * Represents a development site's physical and regulatory
+ * range of possibility/constraint.
+ */
+message ZoningLot {
+  string id = 1;
+  bytes geom = 2;
+  repeated LotLine lot_lines = 3;
+}
+
+/**
+ * Lot line marker.
+ */
+message LotLine {
+  int32 index = 1;
+  enum LotLineType {
+    UNKNOWN = 0;
+    FRONT = 1;
+    SIDE = 2;
+    REAR = 3;
+  }
+  LotLineType type = 2;
+}
+
+/**
+ * Maximum allowable physical extents of a building under zoning.
+ */
+message ZoningEnvelope {
+  bytes geom = 1;
+}
+
+message MakeZoningLotRequest {
+  Scenario scenario = 1;
+  Site site = 2;
+  repeated Zone zones = 3;
+}
+
+/**
+ * Creates new zoning lots.
+ */
+service ZoningLotService {
+  rpc MakeZoningLot(MakeZoningLotRequest) returns (ZoningLot);
+  rpc MakeZoningEnvelope(ZoningLot) returns (ZoningEnvelope);
+}
+
+/**
+ * Creates new zoning envelopes.
+ */
+service ZoningEnvelopeService {
+  rpc MakeZoningEnvelope(ZoningLot) returns (ZoningEnvelope);
+}

@@ -1,0 +1,28 @@
+/**
+ * Top-level container and related services for the
+ * entire analysis framework.
+ */
+syntax = "proto3";
+
+import "scenario.proto";
+import "site.proto";
+import "summary.proto";
+import "zoning_lot.proto";
+
+/**
+ * A named, spatially bounded universe for analysis.
+ */
+message Study {
+  string id = 1;
+  repeated Scenario scenarios = 2;
+  repeated Site sites = 3;
+  repeated ZoningLot zoning_lots = 4;
+}
+
+/**
+ * Creates RWCDS summary tables.
+ */
+service StudySummaryService {
+  rpc GetRWCDSTable(Study) returns (StudySummary);
+  // rpc GetIncrement() returns ();
+}
