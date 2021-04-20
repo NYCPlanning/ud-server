@@ -32,8 +32,7 @@ services:
       INITIAL_MEMORY: 256M
       MAXIMUM_MEMORY: 512M
     depends_on:
-      db:
-        condition: service_healthy
+      - db:
     healthcheck:
       test: curl --fail -s http://localhost:8080/ || exit 1
       interval: 1m30s
