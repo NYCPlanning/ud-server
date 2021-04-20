@@ -44,7 +44,7 @@ services:
     ports:
       - "8882:8080"
     depends_on:
-      - db
+      - db:
     restart: always
     environment:
       HASURA_GRAPHQL_DATABASE_URL: "postgres://${PG_USER}:${PG_PASS}@db:5432/${PG_DB}"
