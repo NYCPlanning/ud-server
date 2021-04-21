@@ -54,7 +54,7 @@ services:
   cms:
     image: strapi/strapi:3.4.6-node10-alpine
     volumes:
-      - strapi-data:/srv/app
+      - /root/strapi/data:/srv/app
     ports:
       - "8883:1337"
 
