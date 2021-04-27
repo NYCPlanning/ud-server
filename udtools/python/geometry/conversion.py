@@ -29,20 +29,54 @@ def shape_to_occ_polygon(shape, z=False):
   if z: points = [ gp_Pnt(x, y, z) for (x, y, z) in coords ]
   else: points = [ gp_Pnt(x, y, 0) for (x, y) in coords ]
   
-  # bspline = GeomAPI_PointsToBSpline()
-  # bspline.
-
-
   polygon = BRepBuilderAPI_MakePolygon()
   for p in points:
       polygon.Add(p)
   return polygon.Shape()
+
+
+def coords_to_array(coords):
+  """Converts list of tuples representing points to OCC Array of OCC Point"""
+  occ_array = TColgp_Array1OfPnt(1, len(coords))
+
+  for i, p in enumerate(coords):
+    occ_pt = gp_Pnt(*p)
+    occ_array.SetValue(i + 1, occ_pt)
+
+  return occ_array
+  
+
+def coords_to_curve(coords):
+  """Converts list of tuples representing points to OCC Curve"""
+  occ_array = coords_to_array(coords)
+  occ_curve = GeomAPI_PointsToBSpline(occ_array, 1, 1).Curve()
+  return occ_curve
+
+
+def coords_to_polygon(coords):
+  """Converts list of tuples representing points to OCC Polygon"""
+  occ_polygon = BRepBuilderAPI_MakePolygon()
+  
+  for p in coords:
+    occ_pt = gp_Pnt(*p)
+    occ_polygon.Add(occ_pt)
+
+  return occ_polygon.Shape()
+
+
+def curve_to_face(curve):
+  """Converts OCC Curve to OCC Face"""
+  wire = curve_to_wire(curve)
+  face = BRepBuilderAPI_MakeFace(wire).Shape()
+  return face
+
 
 def curve_to_wire(curve):
   """Converts OCC Curve to OCC Wire"""
   edge = BRepBuilderAPI_MakeEdge(curve).Shape()
   wire = BRepBuilderAPI_MakeWire(edge).Shape()
   return wire
+
 
 # takes a shapely multipolygon as input
 # (ignores holes)
