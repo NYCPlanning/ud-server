@@ -55,14 +55,6 @@ def section_at(brep, elevation):
     section = BRepAlgoAPI_Common(brep, pln_face)
     return section.Shape()
 
-def upgrade_brep(brep):
-    # use SetAngularTolerance(), SetLinearTolerance() to fine-tune results
-    result = ShapeUpgrade_UnifySameDomain(brep, True, True, False)
-    result.SetAngularTolerance(0.1)
-    result.SetLinearTolerance(0.1)
-    result.Build()
-    return result
-
 # function to return true or false if azimuth a
 # is within 45 degrees of all values in a list of azimuth b
 def within_45_all(az_a, list_of_az_b):
