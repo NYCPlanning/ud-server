@@ -29,8 +29,8 @@ services:
     environment:
       GEOSERVER_ADMIN_PASSWORD: $GEOSERVER_PASS
       GEOSERVER_ADMIN_USER: $GEOSERVER_USER
-      INITIAL_MEMORY: 256M
-      MAXIMUM_MEMORY: 512M
+      INITIAL_MEMORY: 128M
+      MAXIMUM_MEMORY: 256M
     depends_on:
       - db
     healthcheck:
@@ -52,17 +52,41 @@ services:
       HASURA_GRAPHQL_ADMIN_SECRET: secretkey
 
   cms:
-    image: strapi/strapi:3.5.4-alpine
+    image: strapi/strapi:3.4.6-node10-alpine
     volumes:
-      - strapi-data:/srv/app
+      - /root/strapi/data:/srv/app
     ports:
       - '8883:1337'
 
-  # udtools:
-  #   image: .
+  analyticsdb:
+    image: bitnami/mariadb:10.3
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MARIADB_USER=bn_matomo
+      - MARIADB_DATABASE=bitnami_matomo
+      - MARIADB_EXTRA_FLAGS=--max_allowed_packet=64MB
+    volumes:
+      - "analyticsdb_data:/bitnami/mariadb"
+
+  analytics:
+    image: bitnami/matomo:4.3.1
+    ports:
+      - "8884:8080"
+    environment:
+      - MATOMO_DATABASE_HOST=analyticsdb
+      - MATOMO_DATABASE_PORT_NUMBER=3306
+      - MATOMO_DATABASE_USER=bn_matomo
+      - MATOMO_DATABASE_NAME=bitnami_matomo
+      - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - "analytics_data:/bitnami/matomo"
+    depends_on:
+      - analyticsdb
 
 volumes:
   pg-data:
   pg-backups:
   geoserver-data:
   strapi-data:
+  analytics_data:
+  analyticsdb_data:
